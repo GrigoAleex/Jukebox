@@ -1,17 +1,17 @@
 <?php   
 
-include_once "abstracts/jukebox.abstract.php";
-foreach (glob("interfaces/*.php") as $filename)
-{
-    include $filename;
-}
+foreach (glob("abstracts/*.php") as $filename)   include_once $filename;
+foreach (glob("classes/*.php") as $filename)    include_once $filename;
+foreach (glob("interfaces/*.php") as $filename) include_once $filename;
 
-class CoffeeJukebox extends Jukebox implements Product, Coffee, Chocolatemilk
+class CoffeeJukebox extends Jukebox implements Product, Chocolatemilk
 {
     public $name;
-    public $cost;
     public $description;
-    public $message;
+
+    public static function printErrorMessage($target){
+        echo '<p class="m-0" style="color:red">Sorry we do not sell <strong>'.$target.'</strong></p>';
+    }
 
     public function __construct($name, $description, $cost = 1.50){
         $this->name = $name;
@@ -22,29 +22,25 @@ class CoffeeJukebox extends Jukebox implements Product, Coffee, Chocolatemilk
         echo "<strong>".$this->name."</strong> is now ready for a new command"; 
     } 
 
-    public function returnName() :string{
-        return $this->name;
-    }
-
-    public function returnCost() :number{
-        return $this->cost;
-    }
-
     public function deliverProduct($product) :string{
-        $this->message = "<p class='m-0' style='color: green'>The product <strong>".strtolower($product)."</strong> was delivered!</p>"; 
         return $this->message;
     }
 
     public function checkingIfProductExist($product) :void{
         $target = ucfirst(strtolower($product));
-        if(class_implements($this)[$target])
-           $this->deliverProduct($product);
+        if(class_exists($target)){
+            $test = new ReflectionClass($target);
+            if(!$test->isAbstract())
+                $product = new $target();
+            else
+                echo self::printErrorMessage($target);
+        }
+        else
+            echo self::printErrorMessage($target);
     }
 
-    public function getOrder($product) :string{
+    public function getOrder($product) :void{
         echo "<p class='m-0'>The client ordered <strong>".$product. "</strong></p>";
-        $this->message = "<p class='m-0' style='color: red'>We currently <strong> do not have </strong> this product</p>";
         $this->checkingIfProductExist($product);
-        return $this->message;
     }
 }
