@@ -4,7 +4,7 @@ foreach (glob("abstracts/*.php") as $filename)   include_once $filename;
 foreach (glob("classes/*.php") as $filename)    include_once $filename;
 foreach (glob("interfaces/*.php") as $filename) include_once $filename;
 
-class CoffeeJukebox extends Jukebox implements Product, Chocolatemilk
+class CoffeeJukebox extends Jukebox implements Product
 {
     public $name;
     public $description;
@@ -19,6 +19,7 @@ class CoffeeJukebox extends Jukebox implements Product, Chocolatemilk
         $this->description = $description;
     }
     public function __destruct(){ 
+        echo '<p class="m-0 font-weight-bold" style="color:green">Your drink is ready!</p>';
         echo "<strong>".$this->name."</strong> is now ready for a new command"; 
     } 
 
