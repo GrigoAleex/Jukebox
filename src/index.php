@@ -1,6 +1,6 @@
 <?php
     include_once "classes/jukebox.class.php";
-    $jukebox = new CoffeeJukebox("Coffee jukebox", "Offers coffee almost for free!");
+    $jukebox = new CoffeeJukebox();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,9 +12,26 @@
     <title>Coffee Jukebox</title>
 </head>
 <body class="container">
+    <style>
+        p{
+            margin: 0 ;
+        }
+        p.alert{
+            color: red;
+            padding: 0;
+            margin: 0;
+            font-style: italic;
+            font-weight: bold;
+        }
+        p.success{
+            color: green;
+            font-style: italic;
+            font-weight: bold;
+        }
+    </style>
     <div class="mt-5 text-center">
-        <div class="display-4"><?php echo $jukebox->name ?></div>
-        <p class="text-muted"><?php echo $jukebox->description ?></p>
+        <div class="display-4"><?php echo $jukebox->returnName() ?></div>
+        <p class="text-muted"><?php echo $jukebox->returnDescription() ?></p>
     </div>
     <form action="/" class="mb-4" method="get">
         <div class="input-group">
@@ -26,11 +43,13 @@
         </div>
     </form>
     <h1 class="text-muted mb-3">Logs</h1>
+    <div id="display" class="border p-2">
     <?php
         if(!$_GET["product"])
             exit();
 
         echo $jukebox->getOrder($_GET["product"]);
     ?>
+    </div>
 </body>
 </html>
